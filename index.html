@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a100f">
+<meta name="description" content="1000m四方の戦場で最後の一人を目指す、一人称視点サバイバルシューティング">
+<title>LAST SIGNAL — COMPLETE EDITION</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a100f'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%23ffb24a' stroke-width='4'/%3E%3Cpath d='M32 8v16M32 40v16M8 32h16M40 32h16' stroke='%23f4ead8' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23ff5a47'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="source/styles/game.css">
+</head>
+<body>
+<div id="bootSplash"><div class="bootMark">LAST <span>SIGNAL</span></div><div class="bootLine"><i></i></div><div class="bootCopy">TACTICAL SYSTEMS ONLINE</div></div>
+<canvas id="game" class="screen" aria-label="3Dゲーム画面"></canvas><div id="vignette"></div>
+<section id="start" class="overlay">
+  <div class="menu">
+    <div class="eyebrow">OFFLINE SURVIVAL PROTOCOL</div>
+    <h1 class="title">LAST <span>SIGNAL</span></h1>
+    <p class="lead">主武器は現地調達。開始時に選べるのは拳銃または副装備ひとつだけ。ALPHA / BRAVO / CHARLIEに散らばる主武器を奪い合い、装備を整えながら11人のうち最後の一人になれ。</p>
+    <div class="specs"><div class="spec">WORLD 1000 × 1000m</div><div class="spec">PRIMARY: FIELD ACQUISITION</div><div class="spec">3 SETTLEMENTS</div><div class="spec">20 WEAPONS</div></div>
+    <div class="loadout">
+      <div class="field"><label for="sidearmSelect">開始装備（拳銃／副装備から1つ）</label><select id="sidearmSelect"></select></div>
+      <div class="field"><label for="durationSelect">制限時間</label><select id="durationSelect"><option value="1200">20分（標準）</option><option value="900">15分</option><option value="600">10分</option><option value="180">3分（動作確認）</option></select></div>
+    </div>
+    <div class="startRow"><button id="startBtn" class="primary">区域へ降下</button><button id="trainingBtn" class="rangeBtn">射撃訓練場</button><button id="openSettingsStart" class="inputSettingsBtn">⚙ 操作設定</button><div class="controlsNote desktopOnly">WASD 移動　マウス移動 視点（画面クリックで固定）　Space ジャンプ　Shift しゃがむ　Ctrl 走る<br>左クリック 攻撃／使用　右クリック 簡易ADS　E 拾う　R 装填　1–3 持ち替え　Esc メニュー</div></div>
+  </div>
+</section>
+<main id="hud" class="hidden" aria-live="polite">
+  <canvas id="orientationHud" aria-hidden="true"></canvas>
+  <div id="pickupSprites" aria-hidden="true"></div>
+  <div id="viewWeapon" aria-hidden="true"><img id="viewWeaponImage" class="viewWeaponImage" alt=""><img id="viewWeaponImageAds" class="viewWeaponImage" alt=""></div>
+  <div class="topbar"><div class="cluster"><div class="hudbox"><div class="hudlabel">TIME</div><div id="time" class="hudvalue">20:00</div></div><div class="hudbox"><div class="hudlabel">SURVIVORS</div><div id="alive" class="hudvalue">11</div></div></div><div id="signalBox" class="hudbox"><div class="hudlabel">SIGNAL</div><div id="signal" class="hudvalue">HIDDEN</div></div></div>
+  <div id="minimapWrap"><canvas id="minimap" width="300" height="300"></canvas><div class="mapLabel">TACTICAL MAP · ORANGE = SOUND</div><div id="mapCoords" class="mapCoords">X +000 · Z +000</div></div>
+  <div id="feed"></div><div id="crosshair"></div><div id="prompt" class="hidden"></div><div id="borderWarning" class="hidden">WORLD BORDER</div>
+  <div id="weaponHud"><div id="weaponName" class="weaponName"></div><div id="ammo" class="ammo"></div><div class="reloadbar"><i id="reloadFill"></i></div></div>
+  <div id="health"><div class="healthText"><span>VITAL</span><span id="hpText">100</span></div><div class="healthRail"><div id="hpFill" class="healthFill"></div></div></div>
+  <aside id="trainingPanel" class="trainingPanel hidden">
+    <div class="trainingEyebrow">RANGE CONTROL</div>
+    <select id="trainingWeaponSelect" aria-label="訓練用武器"></select>
+    <div class="trainingButtons"><button id="trainingPrev" type="button">◀</button><button id="trainingNext" type="button">▶</button><button id="trainingReset" type="button">標的リセット</button></div>
+    <div id="trainingStats" class="trainingStats">SHOTS 0 · HITS 0 · DOWN 0</div>
+    <div id="trainingWeaponInfo" class="trainingWeaponInfo"></div>
+    <div class="trainingHint desktopOnly">[ / ] 武器切替　T 標的リセット</div>
+  </aside>
+</main>
+<div id="damageFlash"></div><div id="muzzle"></div><div id="scopeOverlay" class="hidden"><div class="scopeRing"></div></div>
+<section id="arsenal" class="overlay hidden"><div class="panel"><div class="panelHead"><h2>武器データ / フィールドで入手</h2><button id="closeArsenal" class="closeBtn">閉じる [Tab]</button></div><div id="weaponGrid" class="weaponGrid"></div></div></section>
+<section id="pause" class="overlay hidden"><div class="menu"><div class="eyebrow">TACTICAL PAUSE</div><h2 class="title">PAUSE</h2><div class="keyGuide desktopOnly"><span><b>W A S D</b>移動</span><span><b>マウス</b>視点移動</span><span><b>SPACE</b>ジャンプ</span><span><b>SHIFT</b>しゃがむ</span><span><b>CTRL</b>走る</span><span><b>左クリック</b>攻撃／使用</span><span><b>右クリック</b>簡易ADS</span><span><b>E / R</b>拾う／装填</span><span><b>1–3 / ホイール</b>持ち替え</span><span><b>ESC</b>メニュー</span></div><div class="pauseActions"><button id="resumeBtn" class="primary">戦闘へ戻る</button><button id="openSettingsPause" class="inputSettingsBtn">⚙ 操作設定</button><button id="retireBtn" class="dangerBtn">リタイア</button></div></div></section>
+<section id="settings" class="overlay hidden"><div class="panel"><div class="panelHead"><h2>操作設定 / INPUT LAB</h2><button id="closeSettings" class="closeBtn">閉じる</button></div><div class="settingsGrid">
+<div class="settingsField"><label for="lookModeSelect">視点入力方式</label><select id="lookModeSelect"><option value="auto">自動判定</option><option value="pointerlock">PCマウス / Pointer Lock</option><option value="pointerevents">Android外付けマウス / Pointer Events</option><option value="touch">タッチ操作</option></select><div id="resolvedModeText" class="settingsHint"></div></div>
+<div class="settingsField"><label for="touchUiSelect">タッチ操作UI</label><select id="touchUiSelect"><option value="auto">自動</option><option value="show">常に表示</option><option value="hide">非表示</option></select><div class="settingsHint">タッチ対応端末でも、外付けマウス中心なら非表示にできます。</div></div>
+<div class="settingsField"><label>タッチADS追尾補助</label><div class="settingsCheck"><input id="touchAdsTracking" type="checkbox"><label for="touchAdsTracking">ADS中にクロスヘア付近の敵を追尾する</label></div><div class="settingsHint">タッチ操作限定。試合中に一度でもマウス／キーボード入力を検出すると、その試合終了まで自動で無効になります。</div></div>
+<div class="settingsField"><label for="sensX">左右感度 <span id="sensXValue" class="rangeValue"></span></label><input id="sensX" type="range" min="40" max="220" step="5"></div>
+<div class="settingsField"><label for="sensY">上下感度 <span id="sensYValue" class="rangeValue"></span></label><input id="sensY" type="range" min="40" max="220" step="5"></div>
+<div class="settingsField"><label>Androidマウス：端旋回</label><div class="settingsCheck"><input id="edgeAssist" type="checkbox"><label for="edgeAssist">左右端で旋回を継続する</label></div><div class="settingsHint">Pointer Events使用時のみ有効。カーソルが画面端に届いても、その方向へ旋回を続けます。</div></div>
+<div class="settingsField"><label for="edgeStart">端旋回の開始位置 <span id="edgeStartValue" class="rangeValue"></span></label><input id="edgeStart" type="range" min="80" max="97" step="1"><div class="settingsHint">値が大きいほど、画面の端ぎりぎりでだけ作動します。</div></div>
+<div class="settingsField"><label for="edgeSpeed">端旋回速度 <span id="edgeSpeedValue" class="rangeValue"></span></label><input id="edgeSpeed" type="range" min="50" max="180" step="5"></div>
+<div class="settingsField"><label>上下反転</label><div class="settingsCheck"><input id="invertY" type="checkbox"><label for="invertY">Y軸を反転する</label></div></div>
+<div class="settingsField"><label>フルスクリーン</label><div class="settingsCheck"><input id="fullscreenEnabled" type="checkbox"><label for="fullscreenEnabled">ゲーム開始時に要求する</label></div></div>
+</div>
+<div class="inputTest"><div class="eyebrow">LIVE INPUT TEST</div><div class="inputTestGrid"><div class="testCell"><b>DEVICE</b><span id="testDevice">-</span></div><div class="testCell"><b>EVENT</b><span id="testEvent">-</span></div><div class="testCell"><b>LOCK</b><span id="testLock">OFF</span></div><div class="testCell"><b>ΔX</b><span id="testDX">0</span></div><div class="testCell"><b>ΔY</b><span id="testDY">0</span></div><div class="testCell"><b>MODE</b><span id="testMode">AUTO</span></div><div class="testCell"><b>EDGE</b><span id="testEdge">OFF</span></div></div><div class="settingsHint">ここでマウスを左右・上下に動かしてください。Android外付けマウスでは DEVICE が mouse、ΔX / ΔY が変化すれば入力を拾えています。</div></div>
+<div class="settingsActions"><button id="saveSettings" class="primary">設定を保存</button><button id="resetSettings" class="closeBtn">初期値へ戻す</button></div><div id="settingsStatus" class="settingsStatus"></div></div></section>
+<section id="result" class="overlay hidden"><div class="menu"><div id="resultEyebrow" class="eyebrow"></div><h2 id="resultTitle" class="title"></h2><div id="resultRank" class="resultRank"></div><div id="resultSub" class="resultSub"></div><button id="restartBtn" class="primary">もう一度</button></div></section>
+<div id="mobileControls"><div id="stick" class="stickZone"><div id="knob" class="stickKnob"></div></div><button id="touchFire" class="touchBtn fireBtn">USE</button><button id="touchJump" class="touchBtn jumpBtn">JUMP</button><button id="touchReload" class="touchBtn reloadBtn">RELOAD</button><button id="touchSwap" class="touchBtn swapBtn">SWAP</button><button id="touchScope" class="touchBtn scopeBtn">AIM</button><button id="touchAction" class="touchBtn actionBtn">ACTION</button><button id="touchMenu" class="touchBtn menuBtn">MENU</button></div>
+<script src="source/scripts/config.js"></script>
+<script src="source/scripts/data.js"></script>
+<script src="source/scripts/audio.js"></script>
+<script src="source/scripts/learning.js"></script>
+<script src="source/scripts/game.js"></script>
+</body></html>
