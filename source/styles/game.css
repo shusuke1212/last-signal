@@ -25,7 +25,7 @@ button,select,input{font:inherit}button{color:inherit}.screen{position:fixed;ins
 #borderWarning{position:absolute;left:50%;top:18%;transform:translateX(-50%);color:#ff7061;font:900 .82rem monospace;letter-spacing:.12em;text-shadow:0 2px 8px #000}
 .panel{width:min(980px,100%);max-height:90vh;overflow:auto;background:#08110f;border:1px solid var(--line);padding:24px}.panelHead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}.panel h2{margin:0;font-size:1.25rem;letter-spacing:.08em}.closeBtn{border:1px solid var(--line);background:#111d19;padding:8px 12px;cursor:pointer}.weaponGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}.weaponCard{border:1px solid var(--line);background:#0f1916;padding:12px;cursor:pointer}.weaponCard:hover,.weaponCard.active{border-color:var(--amber);background:#17221e}.weaponCard h3{font-size:.86rem;margin:0 0 8px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:5px;font:700 .65rem monospace;color:var(--muted)}.stats b{color:var(--ink)}
 .resultRank{font:900 clamp(4rem,20vw,10rem)/.8 Impact,sans-serif;color:var(--amber);margin:20px 0}.resultSub{color:var(--muted);margin-bottom:25px}.pauseActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.dangerBtn{height:54px;border:1px solid rgba(255,90,71,.6);background:#321815;color:#ff9b8f;font-weight:900;padding:0 24px;cursor:pointer}.keyGuide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin-top:22px;color:var(--muted);font-size:.78rem}.keyGuide b{display:inline-block;min-width:94px;color:var(--ink);font:800 .72rem monospace}
-#mobileControls.gameOn{display:block}#mobileControls{display:none;position:fixed;inset:0;z-index:10;pointer-events:none}.stickZone{position:absolute;left:18px;bottom:20px;width:132px;height:132px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(0,0,0,.18);pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none}.stickKnob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:rgba(255,178,74,.55);pointer-events:none}.touchBtn{position:absolute;border:1px solid rgba(255,255,255,.22);background:rgba(8,15,14,.62);color:#fff;border-radius:50%;font-weight:900;pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}.fireBtn{right:24px;bottom:28px;width:88px;height:88px;border-color:rgba(255,90,71,.6)}.jumpBtn{right:122px;bottom:40px;width:58px;height:58px;font-size:.62rem}.reloadBtn{right:116px;bottom:118px;width:58px;height:58px;font-size:.66rem}.swapBtn{right:30px;bottom:130px;width:66px;height:66px;font-size:.66rem}.scopeBtn{right:28px;bottom:212px;width:58px;height:58px;font-size:.56rem}.scopeBtn.active{border-color:var(--amber);color:var(--amber)}.menuBtn{left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translateX(-50%);width:56px;height:38px;border-radius:7px;font-size:.58rem}.actionBtn{left:50%;bottom:calc(env(safe-area-inset-bottom) + 34px);transform:translateX(-50%);min-width:108px;height:46px;border-radius:12px;padding:0 16px;font-size:.72rem;letter-spacing:.08em;border-color:rgba(255,178,74,.68);background:rgba(15,24,20,.82);display:none}.actionBtn.show{display:block}
+#mobileControls.gameOn{display:block}#mobileControls{display:none;position:fixed;inset:0;z-index:10;pointer-events:none}.stickZone{position:absolute;left:18px;bottom:20px;width:132px;height:132px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(0,0,0,.18);pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none}.stickKnob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:rgba(255,178,74,.55);pointer-events:none}.touchBtn{position:absolute;border:1px solid rgba(255,255,255,.22);background:rgba(8,15,14,.62);color:#fff;border-radius:50%;font-weight:900;pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}.fireBtn{right:24px;bottom:28px;width:88px;height:88px;border-color:rgba(255,90,71,.6)}.jumpBtn{right:122px;bottom:40px;width:58px;height:58px;font-size:.62rem}.reloadBtn{right:116px;bottom:118px;width:58px;height:58px;font-size:.66rem}.swapBtn{right:30px;bottom:130px;width:66px;height:66px;font-size:.66rem}.scopeBtn{right:28px;bottom:212px;width:58px;height:58px;font-size:.56rem}.scopeBtn.active{border-color:var(--amber);color:var(--amber)}.crouchBtn{right:194px;bottom:38px;width:62px;height:62px;font-size:.52rem}.crouchBtn.active{border-color:#a7d7a2;background:rgba(34,70,44,.88);color:#d9ffd2}.menuBtn{left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translateX(-50%);width:56px;height:38px;border-radius:7px;font-size:.58rem}.actionBtn{left:50%;bottom:calc(env(safe-area-inset-bottom) + 34px);transform:translateX(-50%);min-width:108px;height:46px;border-radius:12px;padding:0 16px;font-size:.72rem;letter-spacing:.08em;border-color:rgba(255,178,74,.68);background:rgba(15,24,20,.82);display:none}.actionBtn.show{display:block}
 
 .inputSettingsBtn{height:44px;border:1px solid var(--line);background:#111d19;color:var(--ink);font-weight:800;padding:0 16px;cursor:pointer}.inputSettingsBtn:hover{border-color:var(--amber)}
 .settingsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.settingsField{border:1px solid var(--line);background:#0f1916;padding:12px}.settingsField label{display:block;font-size:.7rem;color:var(--muted);margin-bottom:8px;letter-spacing:.06em}.settingsField select,.settingsField input[type=range]{width:100%}.settingsField select{height:42px;background:#101b18;color:var(--ink);border:1px solid #30423b;padding:0 10px}.settingsCheck{display:flex;align-items:center;gap:9px;min-height:42px}.settingsHint{font-size:.73rem;color:var(--muted);line-height:1.6;margin-top:12px}.inputTest{margin-top:16px;border:1px solid var(--line);background:#09110f;padding:14px}.inputTestGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.testCell{background:#111a17;padding:9px;border-top:2px solid #34483f}.testCell b{display:block;font:800 .72rem monospace;color:var(--amber);margin-bottom:5px}.testCell span{font:700 .78rem monospace}.settingsActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.settingsStatus{font-size:.72rem;color:#9fd8bd;margin-top:10px}.rangeValue{float:right;color:var(--ink);font:700 .7rem monospace}@media(max-width:700px){.settingsGrid{grid-template-columns:1fr}.inputTestGrid{grid-template-columns:1fr 1fr}}
@@ -82,6 +82,7 @@ body:after{content:"";position:fixed;inset:0;z-index:4;pointer-events:none;opaci
  .reloadBtn{right:84px;bottom:84px;width:50px;height:50px;font-size:.58rem}
  .swapBtn{right:18px;bottom:90px;width:54px;height:54px;font-size:.58rem}
  .scopeBtn{right:146px;bottom:86px;width:50px;height:50px;font-size:.52rem}
+ .crouchBtn{right:146px;bottom:145px;width:50px;height:50px;font-size:.46rem}
  .menuBtn{top:calc(env(safe-area-inset-top) + 8px);height:34px}
  .actionBtn{bottom:calc(env(safe-area-inset-bottom) + 66px);height:40px;font-size:.64rem}
  #weaponHud{bottom:calc(env(safe-area-inset-bottom) + 3px);padding:3px 10px}
@@ -133,3 +134,34 @@ body:after{content:"";position:fixed;inset:0;z-index:4;pointer-events:none;opaci
 /* v1.6.0 — simplified ADS */
 /* v1.6.13 — ADS cleanup: single high-quality view sprite */
 #crosshair.aiming:before,#crosshair.aiming:after{box-shadow:0 0 5px rgba(0,0,0,.9)}
+
+/* v2.3.2: ADS-only temporary touch tracking override. */
+.assistToggleBtn{right:94px;bottom:216px;width:74px;height:44px;border-radius:10px;font-size:.65rem;display:none;background:rgba(8,15,14,.83);border-color:rgba(255,178,74,.65)}
+.assistToggleBtn.visible{display:block}
+.assistToggleBtn.suspended{color:#ffdfac;border-color:#ffb24a;background:rgba(75,35,18,.86)}
+@media (max-height:540px){.assistToggleBtn{right:202px;bottom:89px;width:71px;height:42px}}
+
+/* v2.4.5: optional match chaining, nested away from the normal start menu. */
+.batchLabInner{padding-top:12px;display:grid;gap:9px;font-size:13px}
+.batchLabInner p{margin:0;line-height:1.6;opacity:.8}
+.batchLabActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.batchLabActions input{width:95px;max-width:45vw;padding:10px;border-radius:7px;border:1px solid #77817b;background:#111c1c;color:#fff;font:inherit}
+.batchProgressText{margin-top:12px;font-size:13px;opacity:.85}
+
+/* v2.4.7: map instruments outside the plotting surface, not on top of player marker. */
+#minimapWrap{aspect-ratio:auto;overflow:visible;padding:4px;}
+#minimap{width:100%;height:auto;aspect-ratio:1;}
+#minimapWrap .mapLabel{left:-1px;right:-1px;top:-22px;height:21px;padding:5px 6px 3px;border:1px solid var(--line);border-bottom:0;background:rgba(5,10,10,.91);font-size:.51rem;line-height:1;white-space:nowrap;letter-spacing:.01em;}
+#minimapWrap .mapCoords{left:-1px;right:-1px;bottom:-22px;height:21px;padding:4px 2px;border:1px solid var(--line);border-top:0;background:rgba(5,10,10,.91);font-size:.48rem;line-height:1.1;}
+/* The flash says 'a shot was heard', not where the shooter is on the map. */
+.gunshotEdge{position:fixed;top:7%;bottom:7%;width:clamp(18px,4.5vw,55px);pointer-events:none;z-index:9;opacity:0;}
+#gunshotEdgeLeft{left:0;background:linear-gradient(90deg,rgba(255,178,74,.75),rgba(255,178,74,0));}
+#gunshotEdgeRight{right:0;background:linear-gradient(270deg,rgba(255,178,74,.75),rgba(255,178,74,0));}
+.gunshotEdge.active{animation:heardShot .28s ease-out both;}
+@keyframes heardShot{0%{opacity:0}17%{opacity:1}45%{opacity:.72}100%{opacity:0}}
+
+/* v2.6.6: Developer Lab is reachable only from ECHO MEMORY tools. */
+.developerPanel{width:min(100%,560px)}
+.devNotice{font-size:.85rem;line-height:1.75;color:var(--muted);margin:16px 0}
+.developerPanel .batchLabInner{border:1px solid var(--line);background:#0f1916;padding:16px}
+

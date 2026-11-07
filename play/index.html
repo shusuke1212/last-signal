@@ -22,7 +22,8 @@
       <div class="field"><label for="sidearmSelect">開始装備（拳銃／副装備から1つ）</label><select id="sidearmSelect"></select></div>
       <div class="field"><label for="durationSelect">制限時間</label><select id="durationSelect"><option value="1200">20分（標準）</option><option value="900">15分</option><option value="600">10分</option><option value="180">3分（動作確認）</option></select></div>
     </div>
-    <div class="startRow"><button id="startBtn" class="primary">区域へ降下</button><button id="trainingBtn" class="rangeBtn">射撃訓練場</button><button id="openSettingsStart" class="inputSettingsBtn">⚙ 操作設定</button><div class="controlsNote desktopOnly">WASD 移動　マウス移動 視点（画面クリックで固定）　Space ジャンプ　Shift しゃがむ　Ctrl 走る<br>左クリック 攻撃／使用　右クリック 簡易ADS　E 拾う　R 装填　1–3 持ち替え　Esc メニュー</div></div>
+    <div class="startRow"><small id="sharedLearningStatus" aria-live="polite"></small><button id="startBtn" class="primary">区域へ降下</button><button id="trainingBtn" class="rangeBtn">射撃訓練場</button><button id="openSettingsStart" class="inputSettingsBtn">⚙ 操作設定</button><div class="controlsNote desktopOnly">WASD 移動　マウス移動 視点（画面クリックで固定）　Space ジャンプ　Shift しゃがむ　Ctrl 走る<br>左クリック 攻撃／使用　右クリック 簡易ADS　E 拾う　R 装填　1–3 持ち替え　Esc メニュー</div></div>
+    
   </div>
 </section>
 <main id="hud" class="hidden" aria-live="polite">
@@ -30,7 +31,7 @@
   <div id="pickupSprites" aria-hidden="true"></div>
   <div id="viewWeapon" aria-hidden="true"><img id="viewWeaponImage" class="viewWeaponImage" alt=""><img id="viewWeaponImageAds" class="viewWeaponImage" alt=""></div>
   <div class="topbar"><div class="cluster"><div class="hudbox"><div class="hudlabel">TIME</div><div id="time" class="hudvalue">20:00</div></div><div class="hudbox"><div class="hudlabel">SURVIVORS</div><div id="alive" class="hudvalue">11</div></div></div><div id="signalBox" class="hudbox"><div class="hudlabel">SIGNAL</div><div id="signal" class="hudvalue">HIDDEN</div></div></div>
-  <div id="minimapWrap"><canvas id="minimap" width="300" height="300"></canvas><div class="mapLabel">TACTICAL MAP · ORANGE = SOUND</div><div id="mapCoords" class="mapCoords">X +000 · Z +000</div></div>
+  <div id="minimapWrap"><canvas id="minimap" width="300" height="300"></canvas><div class="mapLabel">TACTICAL MAP</div><div id="mapCoords" class="mapCoords">X +000 · Z +000</div></div>
   <div id="feed"></div><div id="crosshair"></div><div id="prompt" class="hidden"></div><div id="borderWarning" class="hidden">WORLD BORDER</div>
   <div id="weaponHud"><div id="weaponName" class="weaponName"></div><div id="ammo" class="ammo"></div><div class="reloadbar"><i id="reloadFill"></i></div></div>
   <div id="health"><div class="healthText"><span>VITAL</span><span id="hpText">100</span></div><div class="healthRail"><div id="hpFill" class="healthFill"></div></div></div>
@@ -43,6 +44,7 @@
     <div class="trainingHint desktopOnly">[ / ] 武器切替　T 標的リセット</div>
   </aside>
 </main>
+<div id="gunshotEdgeLeft" class="gunshotEdge" aria-hidden="true"></div><div id="gunshotEdgeRight" class="gunshotEdge" aria-hidden="true"></div>
 <div id="damageFlash"></div><div id="muzzle"></div><div id="scopeOverlay" class="hidden"><div class="scopeRing"></div></div>
 <section id="arsenal" class="overlay hidden"><div class="panel"><div class="panelHead"><h2>武器データ / フィールドで入手</h2><button id="closeArsenal" class="closeBtn">閉じる [Tab]</button></div><div id="weaponGrid" class="weaponGrid"></div></div></section>
 <section id="pause" class="overlay hidden"><div class="menu"><div class="eyebrow">TACTICAL PAUSE</div><h2 class="title">PAUSE</h2><div class="keyGuide desktopOnly"><span><b>W A S D</b>移動</span><span><b>マウス</b>視点移動</span><span><b>SPACE</b>ジャンプ</span><span><b>SHIFT</b>しゃがむ</span><span><b>CTRL</b>走る</span><span><b>左クリック</b>攻撃／使用</span><span><b>右クリック</b>簡易ADS</span><span><b>E / R</b>拾う／装填</span><span><b>1–3 / ホイール</b>持ち替え</span><span><b>ESC</b>メニュー</span></div><div class="pauseActions"><button id="resumeBtn" class="primary">戦闘へ戻る</button><button id="openSettingsPause" class="inputSettingsBtn">⚙ 操作設定</button><button id="retireBtn" class="dangerBtn">リタイア</button></div></div></section>
@@ -60,11 +62,15 @@
 </div>
 <div class="inputTest"><div class="eyebrow">LIVE INPUT TEST</div><div class="inputTestGrid"><div class="testCell"><b>DEVICE</b><span id="testDevice">-</span></div><div class="testCell"><b>EVENT</b><span id="testEvent">-</span></div><div class="testCell"><b>LOCK</b><span id="testLock">OFF</span></div><div class="testCell"><b>ΔX</b><span id="testDX">0</span></div><div class="testCell"><b>ΔY</b><span id="testDY">0</span></div><div class="testCell"><b>MODE</b><span id="testMode">AUTO</span></div><div class="testCell"><b>EDGE</b><span id="testEdge">OFF</span></div></div><div class="settingsHint">ここでマウスを左右・上下に動かしてください。Android外付けマウスでは DEVICE が mouse、ΔX / ΔY が変化すれば入力を拾えています。</div></div>
 <div class="settingsActions"><button id="saveSettings" class="primary">設定を保存</button><button id="resetSettings" class="closeBtn">初期値へ戻す</button></div><div id="settingsStatus" class="settingsStatus"></div></div></section>
-<section id="result" class="overlay hidden"><div class="menu"><div id="resultEyebrow" class="eyebrow"></div><h2 id="resultTitle" class="title"></h2><div id="resultRank" class="resultRank"></div><div id="resultSub" class="resultSub"></div><button id="restartBtn" class="primary">もう一度</button></div></section>
-<div id="mobileControls"><div id="stick" class="stickZone"><div id="knob" class="stickKnob"></div></div><button id="touchFire" class="touchBtn fireBtn">USE</button><button id="touchJump" class="touchBtn jumpBtn">JUMP</button><button id="touchReload" class="touchBtn reloadBtn">RELOAD</button><button id="touchSwap" class="touchBtn swapBtn">SWAP</button><button id="touchScope" class="touchBtn scopeBtn">AIM</button><button id="touchAction" class="touchBtn actionBtn">ACTION</button><button id="touchMenu" class="touchBtn menuBtn">MENU</button></div>
+<section id="developerLab" class="overlay hidden" aria-label="開発者モード"><div class="panel developerPanel"><div class="panelHead"><h2>DEVELOPER LAB / 開発者モード</h2><button id="closeDeveloperLab" type="button" class="closeBtn">タイトルへ戻る</button></div><div class="eyebrow">MATCH RESEARCH</div><p class="devNotice">この画面はタイトルからのみ開けます。AI連続試合ではプレイヤーが開始直後に退場し、AIのみの試合と学習を指定回数実行します。</p><div class="batchLabInner"><label for="batchMatchCount">AI連続試合数（1〜200）</label><div class="batchLabActions"><input id="batchMatchCount" type="number" min="1" max="200" step="1" value="20" inputmode="numeric"><button id="batchStartBtn" type="button" class="rangeBtn">AI連続試合を開始</button></div><div id="batchHint" class="settingsHint">実行中は試合ごとに学習結果が保存されます。途中停止は現在の試合終了後に反映されます。</div></div></div></section>
+<section id="resolution" class="overlay hidden" aria-live="polite"><div class="menu" style="max-width:420px"><div class="eyebrow">LAST SIGNAL</div><h2 class="title" style="font-size:clamp(22px,4vw,34px)">戦闘を処理中</h2><p style="font-size:13px;opacity:.8">残存AIの戦闘と学習を計算しています</p><div style="height:9px;border-radius:8px;background:#34434a;overflow:hidden;margin:18px 0 9px"><div id="resolutionProgress" style="height:100%;width:0%;background:#83bcb0;transition:width .1s linear"></div></div><div id="resolutionLabel" style="font-size:13px">0%</div><div id="batchProgressText" class="batchProgressText hidden"></div><button id="batchStopBtn" type="button" class="closeBtn hidden" style="margin-top:16px">今回の試合後に停止</button></div></section>
+<section id="result" class="overlay hidden"><div class="menu"><div id="resultEyebrow" class="eyebrow"></div><h2 id="resultTitle" class="title"></h2><div id="resultRank" class="resultRank"></div><div id="resultSub" class="resultSub"></div><div id="sharedLearningResult" aria-live="polite"></div><button id="restartBtn" class="primary">もう一度</button></div></section>
+<div id="mobileControls"><div id="stick" class="stickZone"><div id="knob" class="stickKnob"></div></div><button id="touchFire" class="touchBtn fireBtn">USE</button><button id="touchJump" class="touchBtn jumpBtn">JUMP</button><button id="touchCrouch" class="touchBtn crouchBtn" type="button" aria-label="しゃがむ／立つ" aria-pressed="false">CROUCH</button><button id="touchReload" class="touchBtn reloadBtn">RELOAD</button><button id="touchSwap" class="touchBtn swapBtn">SWAP</button><button id="touchScope" class="touchBtn scopeBtn">AIM</button><button id="touchAssistToggle" class="touchBtn assistToggleBtn" type="button" aria-label="ADS照準補助を一時解除" aria-pressed="false">補助 OFF</button><button id="touchAction" class="touchBtn actionBtn">ACTION</button><button id="touchMenu" class="touchBtn menuBtn">MENU</button></div>
 <script src="../source/scripts/config.js"></script>
 <script src="../source/scripts/data.js"></script>
 <script src="../source/scripts/audio.js"></script>
+<script src="../source/scripts/movement-audit.js"></script>
 <script src="../source/scripts/learning.js"></script>
+<script src="../source/scripts/shared-learning.js"></script>
 <script src="../source/scripts/game.js"></script>
 </body></html>

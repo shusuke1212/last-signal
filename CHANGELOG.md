@@ -1,3 +1,76 @@
+## v2.7.2 共有学習と交戦評価
+
+- 戦術試行は通常8秒。時間内に当初の相手へ初めて射撃した場合は、発砲から24秒まで評価を延長。従来行動と遮蔽行動の両方に適用。
+- GitHub Pages向けの共有学習に対応。保存サービスの設定後、全プレイヤーが共有JSONを読み込み、試合後に更新する。保存成功順の後勝ち。
+
+## v2.7.1 ロープ降下と遮蔽後の戦術分岐
+
+- ロープを装備して屋根の縁で地面へ視線を下げると、安全な着地点がある方向に約1.9秒で降下。降下中は移動経路が固定され、射撃・持ち替えができない。被弾は通常どおり。再使用は8秒。
+- 遮蔽へ到達したAIが、待機・装填・即離脱を試す。装填は弾倉に空きがあり予備弾がある場合。遮蔽到達後の戦果を個体ごとの coverFollowups に保存し、次回の分岐選択に使用。既存の戦術評価は引き継ぐ。
+- AI連続試合でも戦術パターンの開始・分岐・評価を戦術CSVに出力。定期位置記録や発砲等の全行動は通常試合のみ。出力は引き続き最大20試合。
+
+## v2.7.0 遮蔽物を使う戦術の学習
+
+- 射程外に視認した相手がいて、通れる経路上に射線を切れる場所があるとき、AIが通常行動と「遮蔽へ後退 → 短く待つ → 反撃または離脱」を比較。
+- HP34未満かどうかで評価を分ける。開始から8秒間の与ダメージ・被ダメージと、その間の退場で評価し、終了前に試合が打ち切られた試行は集計しない。
+- 個体ごとの試行数と評価を学習JSONの coverPatterns に保存。既存の学習JSONは新項目を初期値で補完。戦術CSVには選択・手順の切り替え・評価を出力。
+
+## v2.6.11 戦術CSVの出力上限
+
+- 通常試合の戦術CSVは直近20試合を出力。進行中の試合に記録があれば20試合の枠に含める。
+
+## v2.6.10 構え中の武器画像フォールバック
+
+- 構え専用画像の読み込み中や読み込み失敗時は通常の武器画像を表示。読み込み完了後に構え専用画像へ切り替える。
+
+## v2.6.9 共通戦術ログ
+
+- 通常試合の全参加者を同じ時系列と列に記録。0.5秒ごとの位置・向き・装備と、射撃・装填・取得・持ち替え・被弾・撃破された時点を収録。プレイヤー退場後の高速決着も含む。定期観察の相手欄は78m以内で遮蔽物に遮られていない最寄りの参加者。視野や認知の判定とは別。
+- 研究画面の「ツール → 戦術CSV」から出力。ページ内で完了した直近5試合分と、進行中の試合を保持。射撃訓練・AI連続試合は対象外。
+
+## v2.6.8 プレイヤー戦術観察
+
+- 研究画面の「ツール」に「プレイヤー戦術CSV」を追加。通常試合の射撃、近接攻撃、持ち替え、取得、装填開始、行動終了と定期観察を記録。
+- 敵の見え方はカメラと遮蔽物から推定。観察対象が見えなくなった後も最大8秒、同じ敵の位置やAIの追跡対象を観察用の列に記録。別の敵が画面内に現れた場合は観察対象を切り替える。
+- ログはページ内に保持。ページを閉じたり再読み込みしたりする前にCSVを出力。
+
+## v2.6.7 BR-3 バースト
+
+- AIのBR-3も、残弾の範囲で最大3発を武器設定の発射間隔で発射。通常試合と高速決着の両方に対応。
+- 射線を失う、標的・武器が変わる、射撃不能になると残りの連射を中断。
+
+## v2.6.6 コード整理
+
+- 現行の探索方針から参照されない旧巡回ルート選定と関連フィールドを削除。
+- 未使用の地面描画関数、射撃通番、旧連続試合メニュー用CSSを削除。地面と罠の描画色は共通定数を参照。
+
+# v2.6.0 プレイヤー関係性学習を追加
+
+## v2.5.9 EXPLORATION LEARNING
+- Neutral per-brain contextual exploration policies (hold/near/mid/wide); route distances are no longer settlement-biased.
+- Outcome-driven exploration updates and CSV/research visibility, backward-compatible memory v1.
+
+## v2.5.8 VICTORY REWARD FIX
+- 勝者限定の報酬、時間切れ複数人生存の引き分け評価、巡回等の履歴配分を修正。記憶形式は維持。
+
+## v2.5.7 POSITION AUDIT
+- 移動ログCSVへ最終座標・5分刻み座標・集落距離を追加。AI行動／学習は変更なし。
+
+## v2.5.2
+- 有限弾薬（v2.5.1）を維持し、ナイフを50ダメージ・0.5秒間隔・命中時0.65秒射撃/リロード不能へ調整。NPCとプレイヤー共通。
+
+## v2.5.0
+- Low hedges: sight-blocking, bullet-permeable soft cover; touch CROUCH/STAND; training test target.
+
+## v2.4.6 — SAFE MEMORY RESET
+- 学習初期化の直前に、日時付きJSONバックアップのダウンロードを自動実行。
+- バックアップ生成エラー時は初期化を禁止。保存確認後にOK/キャンセルを選択。
+- 対戦・学習・高速決着・連続試合には変更なし。
+
+## v2.4.5 — MATCH CHAIN
+- 詳細機能から指定回数の連続試合（プレイヤー即時退場＋既存高速決着）に対応。
+- 各試合後の学習保存と連続実行中の停止予約を追加。通常プレイとAIルールは変更なし。
+
 # Changelog
 
 ## Complete Edition 1.8.4
@@ -311,3 +384,28 @@
 - 発砲、近接、装填、取得、命中、被弾、UI、環境音を端末上で生成。
 - 起動スプラッシュ、HUDのガラス表現、走査線、モバイル向け表示調整を追加。
 - 元の単一HTMLを `legacy/` に保管。
+
+## v2.4.8 COVER ISLANDS
+平坦な地表の格子模様を除去。武器集落とは離れた野外遮蔽物群を追加。学習データ形式は維持。
+
+## v2.4.9 FOREST RANGE + ADS RETUNE
+- 訓練場を拡張し、実戦共通の木と森林標的を配置。ADS捕捉範囲と追尾初動を調整。
+
+## v2.5.1 — finite ammunition / persistent loot
+- All 19 firearms carry <=60 rounds at spawn; per-ground-weapon ammo is conserved on swaps and NPC death.
+- NPC finite ammo, reload, sidearm and knife fallback; no AI learning rule changes.
+- Training ammunition remains unlimited.
+
+## v2.5.3 — MOVEMENT AUDIT
+- AI移動の指示時間、阻害時間、巡回目標の到達状況を計測する読み取り専用の研究機能を追加。
+- ECHO MEMORY研究画面に集計とUTF-8 BOM CSV出力を追加。
+- AIの判断、戦闘、学習規則、世界生成、記憶形式は変更なし。
+
+## v2.5.4
+- Player movement + proximity audit linked to NPC match logs.
+
+## v2.5.5 MOBILE ADS FOLLOW RETUNE
+- タッチADS補助の捕捉・維持範囲と追尾速度を調整。操作中の横移動に対応。自動索敵や遮蔽物透視は追加しない。
+
+## v2.5.6 NPC MOVEMENT RECOVERY
+- Add goal-aware obstacle-corner detours to NPC locomotion while preserving combat/learning behavior and movement audit.

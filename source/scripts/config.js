@@ -1,6 +1,7 @@
 /* LAST SIGNAL - shared runtime configuration */
 window.LSConfig = Object.freeze({
-  version: '1.8.4',
+  version: '2.7.2',
+  sharedLearningUrl: '',
   worldSize: 1000,
   normalDrawDistance: 95,
   scopedDrawDistance: 120,
