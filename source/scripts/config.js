@@ -1,7 +1,7 @@
 /* LAST SIGNAL - shared runtime configuration */
 window.LSConfig = Object.freeze({
   version: '2.7.2',
-  sharedLearningUrl: '',
+  sharedLearningUrl: 'https://last-signal-qr5u.onrender.com/learning',
   worldSize: 1000,
   normalDrawDistance: 95,
   scopedDrawDistance: 120,
