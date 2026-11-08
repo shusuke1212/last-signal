@@ -165,3 +165,80 @@ body:after{content:"";position:fixed;inset:0;z-index:4;pointer-events:none;opaci
 .devNotice{font-size:.85rem;line-height:1.75;color:var(--muted);margin:16px 0}
 .developerPanel .batchLabInner{border:1px solid var(--line);background:#0f1916;padding:16px}
 
+
+#missionTransition {
+  box-sizing: border-box;
+  width: min(420px, calc(100% - 36px));
+  padding: 28px;
+  border: 1px solid #55756b;
+  border-radius: 16px;
+  background: #111d19;
+  color: #f4ead8;
+}
+#missionTransition::backdrop { background: rgba(4, 9, 9, .86); }
+#missionTransition h2 { margin: 8px 0 18px; font-size: clamp(20px, 5vw, 30px); }
+#missionTransition progress { display: block; width: 100%; height: 12px; accent-color: #83bcb0; }
+
+/* Keep touch play within a stable viewport as the browser bars move. */
+@media (pointer: coarse), (max-width: 700px) {
+  html, body {
+    overflow: hidden;
+    overflow: clip;
+    overscroll-behavior: none;
+    touch-action: auto;
+  }
+
+  body {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 100%;
+    height: 100svh;
+  }
+
+  :fullscreen > body {
+    height: 100%;
+  }
+
+  .screen, #vignette, .overlay, #hud, #damageFlash, #muzzle,
+  #scopeOverlay, #mobileControls, #bootSplash, .gunshotEdge, body::after {
+    position: absolute;
+  }
+
+  #game, #mobileControls {
+    touch-action: none;
+  }
+
+  .overlay {
+    grid-template-rows: minmax(0, 1fr);
+    padding: max(12px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .overlay > .menu, .overlay > .panel {
+    min-height: 0;
+    max-height: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+
+  select, input:not([type="range"]):not([type="checkbox"]) {
+    font-size: max(16px, 1em);
+  }
+}
+
+@media (pointer: coarse) and (max-height: 500px) and (orientation: landscape), (max-width: 700px) and (max-height: 500px) and (orientation: landscape) {
+  #start .menu { padding: 14px; }
+  #start .title { font-size: clamp(2rem, 12svh, 3.5rem); }
+  #start .lead { margin: 10px 0; line-height: 1.4; }
+  #start .specs { margin-bottom: 10px; gap: 4px; }
+  #start .spec { padding: 4px 6px; }
+  #start .loadout { grid-template-columns: 1fr 1fr; margin-bottom: 10px; }
+  #start .field select { height: 38px; }
+  #start .startRow { gap: 8px; }
+  #start .startRow button { min-height: 40px; height: auto; }
+}

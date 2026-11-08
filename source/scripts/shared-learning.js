@@ -1,16 +1,36 @@
 (() => {
   const endpoint = window.LSConfig?.sharedLearningUrl?.trim();
   if (!endpoint) return;
-  function showStatus(message) {
-    for (const id of ['sharedLearningStatus','sharedLearningResult']) {
-      document.getElementById(id).textContent = message;
-    }
-  }
+
+  const dialog = document.querySelector('#missionTransition');
+  const title = document.querySelector('#missionTransitionTitle');
   const pendingKey = 'lastSignal.shared.pending:' + endpoint;
-  let queued = Promise.resolve();
-  let loading = false;
+  let busy = false;
   let pending = false;
   try { pending = localStorage.getItem(pendingKey) === '1'; } catch {}
+
+  dialog.addEventListener('cancel', (event) => event.preventDefault());
+  for (const type of ['keydown', 'keyup', 'pointerdown', 'pointerup', 'click']) {
+    window.addEventListener(type, (event) => {
+      if (!busy) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+  }
+
+  async function duringTransition(message, operation) {
+    busy = true;
+    try {
+      title.textContent = message;
+      dialog.showModal();
+      await operation();
+    } catch (error) {
+      console.warn('LAST SIGNAL data request failed', error);
+    } finally {
+      dialog.close();
+      busy = false;
+    }
+  }
 
   function markPending(value) {
     pending = value;
@@ -20,48 +40,32 @@
     } catch {}
   }
 
-  async function load() {
-    loading = true;
-    showStatus('共有学習データを確認中…');
-    try {
-      await queued;
-      if (pending) {
-        showStatus('未同期の学習から再開します');
-        return;
-      }
-      const response = await fetch(endpoint, {cache:'no-store', signal:AbortSignal.timeout(12000)});
-      if (!response.ok) throw Error('共有データを取得できません');
-      const result = window.LSLearning.importData(await response.json());
-      showStatus('共有学習を読み込みました · ' + result.matches + '戦');
-    } catch {
-      showStatus('共有に接続できません。この端末の学習で再開します');
-    } finally {
-      loading = false;
-    }
+  function load() {
+    if (pending) return;
+    return duringTransition('降下地点へ移動中', async () => {
+      const response = await fetch(endpoint, {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(12000)
+      });
+      if (!response.ok) throw new Error('Read failed: HTTP ' + response.status);
+      window.LSLearning.importData(await response.json());
+    });
   }
 
   function publish() {
-    const snapshot = JSON.stringify(JSON.parse(window.LSLearning.exportData()));
     markPending(true);
-    showStatus('共有学習を保存中…');
-    const job = queued.then(async () => {
-      try {
-        const response = await fetch(endpoint, {
-          method:'POST', headers:{'Content-Type':'application/json'}, body:snapshot,
-          signal:AbortSignal.timeout(20000)
-        });
-        if (!response.ok) throw Error('共有データを保存できません');
-        if (queued === job) {
-          markPending(false);
-          showStatus('共有学習を保存しました');
-        }
-      } catch {
-        if (queued === job) showStatus('共有保存に失敗しました。この端末に学習を保持しています');
-      }
+    return duringTransition('区域から離脱中', async () => {
+      const snapshot = JSON.stringify(JSON.parse(window.LSLearning.exportData()));
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: snapshot,
+        signal: AbortSignal.timeout(20000)
+      });
+      if (!response.ok) throw new Error('Write failed: HTTP ' + response.status);
+      markPending(false);
     });
-    queued = job;
-    return job;
   }
 
-  window.LSSharedLearning = {enabled:true, get loading(){return loading}, load, publish};
+  window.LSSharedLearning = { get busy() { return busy; }, load, publish };
 })();

@@ -1,6 +1,6 @@
 /* LAST SIGNAL - shared runtime configuration */
 window.LSConfig = Object.freeze({
-  version: '2.7.2',
+  version: '2.7.4',
   sharedLearningUrl: 'https://last-signal-qr5u.onrender.com/learning',
   worldSize: 1000,
   normalDrawDistance: 95,
@@ -14,6 +14,7 @@ window.LSConfig = Object.freeze({
 });
 
 addEventListener('DOMContentLoaded', () => {
+  document.title += ' · v' + window.LSConfig.version;
   const splash = document.querySelector('#bootSplash');
   requestAnimationFrame(() => requestAnimationFrame(() => splash?.classList.add('ready')));
   setTimeout(() => splash?.remove(), 1150);
